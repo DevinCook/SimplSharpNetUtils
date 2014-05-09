@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* HTTPRequest.cs
+ *
+ * Handle a simple HTTPRequest.  This is a bridge between SimplSharp and Simpl+
+ * 
+ * Note that a username/password can be supplied.
+ *
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -1,0 +1,74 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+*******************************************************************************************/
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+INTEGER_PARAMETER Port;
+
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+
+
+STRING_PARAMETER	Address[64];
+STRING_PARAMETER	Username[16];
+STRING_PARAMETER	Password[16];
+
+STRING_INPUT	URL$[1024];
+STRING_OUTPUT	ERR_MSG$;	
+STRING_OUTPUT	RX$;
+DIGITAL_OUTPUT	ERR;
+
+#USER_SIMPLSHARP_LIBRARY "SIMPLSharpNetUtils"
+
+STRING Address_Cache[64];
+
+
+HTTPRequest Client;
+
+Callback Function MyOnReceive(String s)
+{
+	TRACE("On Rx$");
+	RX$ = s;
+}
+
+Callback Function MyOnError(String s)
+{
+	Err_msg$ = s;
+	pulse(10,Err);
+}
+
+Change URL$
+{
+	Client.Password = Password;
+	Client.User = Username;
+	Client.Port = Port;
+	Client.URL = "http://"+Address+":"+itoa(Port)+"/"+URL$;
+	Client.DoIt();
+} 
+
+Function Init()
+{
+	RegisterDelegate(Client,OnResponse,MyOnReceive);
+	RegisterDelegate(Client,OnError,MyOnError);
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	Init();
+}

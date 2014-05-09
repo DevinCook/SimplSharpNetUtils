@@ -1,0 +1,95 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+*******************************************************************************************/
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+INTEGER_PARAMETER Port;
+
+STRING_INPUT	Address[64];
+
+DIGITAL_INPUT	Connect;
+DIGITAL_INPUT	FilterVTs;
+
+STRING_INPUT	TX$[1024];
+STRING_OUTPUT	RX$;
+
+DIGITAL_OUTPUT	Connected;
+                          
+#USER_SIMPLSHARP_LIBRARY "SIMPLSharpNetUtils"
+
+STRING Address_Cache[64];
+
+TCPSocket Client; 
+
+
+Change Address
+{
+	Address_Cache = Address;
+}
+
+PUSH Connect
+{
+	Client.Connect(Address_Cache,Port,1024);
+}
+
+Release Connect
+{
+	Client.Disconnect();
+}
+
+Callback Function MyOnConnect()
+{
+	Connected = 1;
+	TRACE("On Connect\n");
+}
+
+Callback Function MyOnDisconnect()
+{
+	Connected = 0;
+	TRACE("On Disconnect\n");
+}
+
+Callback Function MyOnReceive(String s)
+{
+	TRACE("On Rx$");
+	RX$ = s;
+}
+
+Change TX$
+{
+	Client.Send(TX$);
+} 
+
+Change FilterVTs
+{
+	Client.FilterVtCmds = FilterVTs;
+}
+
+Function Init()
+{
+	RegisterDelegate(Client,OnConnect,MyOnConnect);
+	RegisterDelegate(Client,OnDisconnect,MyOnDisconnect);
+	RegisterDelegate(Client,OnRx,MyOnReceive);
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	Init();
+}
+
+
+

@@ -1,4 +1,15 @@
-﻿using System;
+﻿/* TCPSocket.cs
+ * 
+ * This is a simple TCP Client bridge between SimplSharp and Simpl+
+ * 
+ * Note that the FilterVtCmds flag tries to filter extra control characters and VT Esc characters from
+ * the received content.
+ *
+ */
+
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

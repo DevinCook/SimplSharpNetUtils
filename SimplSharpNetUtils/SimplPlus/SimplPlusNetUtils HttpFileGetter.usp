@@ -1,0 +1,81 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+*******************************************************************************************/
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+#USER_SIMPLSHARP_LIBRARY "SIMPLSharpNetUtils"
+
+STRING_PARAMETER HTTP_IP[16];
+INTEGER_PARAMETER	HTTP_PORT;
+STRING_PARAMETER CACHE_FILE$[64];
+
+#BEGIN_PARAMETER_PROPERTIES HTTP_IP
+propDefaultValue = "0.0.0.0";
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES HTTP_PORT
+propDefaultValue = 8080d;
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES CACHE_FILE$
+propDefaultValue = "\\NVRAM\\temp.txt";
+#END_PARAMETER_PROPERTIES
+
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;		DIGITAL_OUTPUT	_SKIP_;
+
+
+STRING_INPUT	GRAB_FILE[256];
+STRING_INPUT	SERVER_OVERRIDE[16];
+DIGITAL_OUTPUT	READY;
+ANALOG_OUTPUT	FileLen;
+
+String ServerIP$[32];
+
+CHANGE GRAB_FILE
+{
+	Long_Integer sz;
+	String URL[64];
+	HttpGetter Getter;
+
+	READY = 0;
+
+	URL = ServerIP$+":"+itoa(HTTP_PORT)+"/"+GRAB_FILE;
+
+	sz = Getter.Fetch(URL,CACHE_FILE$);
+
+	if (sz>0)
+	{
+		FileLen = sz;
+		READY = 1;
+	}
+	else
+	{
+		FileLen = 0;
+		TRACE("%s",Getter.ErrorMsg);
+	}
+}
+
+CHANGE SERVER_OVERRIDE
+{
+	ServerIP$ = SERVER_OVERRIDE;
+}
+
+Function Main()
+{
+	ServerIP$ = HTTP_IP;
+}

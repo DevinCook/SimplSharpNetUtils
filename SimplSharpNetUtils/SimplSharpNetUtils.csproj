@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="HTTPRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HTTPGetter.cs" />
     <Compile Include="TCPSocket.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
@@ -66,9 +67,9 @@
         <ProgramIdTag>SimplSharpNetUtils</ProgramIdTag>
         <SystemName>SimplSharpNetUtils</SystemName>
         <Programmer />
-        <ArchiveFilename />
+        <ArchiveFilename>C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\bin\SimplSharpNetUtils.clz</ArchiveFilename>
         <MinFirmwareVersion>1.007.0017</MinFirmwareVersion>
-        <CompiledOn>5/8/2014 7:43:45 PM</CompiledOn>
+        <CompiledOn>5/8/2014 8:35:04 PM</CompiledOn>
         <AdditionalInfo />
         <EmbedSourceArchive>False</EmbedSourceArchive>
         <CopyTo />
