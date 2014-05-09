@@ -2,3 +2,6 @@
 *.ASV
 *.sm2
 *.sig
+SimplSharpNetUtils/SimplPlus/SPlsWork/
+SimplSharpNetUtils/obj/
+

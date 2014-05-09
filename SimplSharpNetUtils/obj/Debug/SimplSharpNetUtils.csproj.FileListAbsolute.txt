@@ -1,6 +1,0 @@
-C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\bin\SimplSharpNetUtils.dll
-C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\bin\SimplSharpNetUtils.pdb
-C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\bin\SimplSharpHelperInterface.dll
-C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\obj\Debug\SimplSharpNetUtils.dll
-C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\obj\Debug\SimplSharpNetUtils.pdb
