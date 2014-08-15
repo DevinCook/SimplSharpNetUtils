@@ -22,6 +22,7 @@ namespace SimplSharpNetUtils
     {
         TCPClient client;
         bool bFilterVtCmds = false;
+        bool bDebug = false;
 
         public delegate void ConnectedHandler();
         public ConnectedHandler OnConnect { set; get; }
@@ -38,25 +39,35 @@ namespace SimplSharpNetUtils
             get { return bFilterVtCmds ? 1 : 0; }
         }
 
+        public int Debug
+        {
+            set { bDebug = value != 0; }
+            get { return bDebug ? 1 : 0; }
+        }
+
         public TCPSocket()
         {
         }
 
         public int Connect(String IPAddress, int port, int buffersz)
         {
-            CrestronConsole.PrintLine("Connect({0},{1},{2})", IPAddress, port, buffersz);
+            if (bDebug)
+                CrestronConsole.PrintLine("Connect({0},{1},{2})", IPAddress, port, buffersz);
+
             client = new TCPClient(IPAddress, port, buffersz);
 
             SocketErrorCodes err = client.ConnectToServerAsync(myConnectCallback);
 
-            CrestronConsole.PrintLine("Connect() - " + err);
+            if (bDebug)
+                CrestronConsole.PrintLine("Connect() - " + err);
 
             return Convert.ToInt32(err);
         }
 
         public void Disconnect()
         {
-            CrestronConsole.PrintLine("Disconnect()");
+            if (bDebug)
+                CrestronConsole.PrintLine("Disconnect()");
             if (client != null)
                 client.DisconnectFromServer();
         }
@@ -77,25 +88,27 @@ namespace SimplSharpNetUtils
                             IsVt = false;
                     }
                     else
-                        if (c == (char) 0x1B)
+                        if (c == (char)0x1B)
                             IsVt = true;
                         else
-                            if (!(Char.IsControl(c) && (c != (char) 0x0d) && (c != (char) 0x0a)))
+                            if (!(Char.IsControl(c) && (c != (char)0x0d) && (c != (char)0x0a)))
                                 sOut.Append(c);
                 }
             }
-            
+
             return (sOut.ToString());
         }
 
         void myReceiveCallback(TCPClient tcpClient, int rxSize)
         {
-            CrestronConsole.PrintLine("Received " + rxSize);
+            if (bDebug)
+                CrestronConsole.PrintLine("Received " + rxSize);
             String rxBuff = System.Text.Encoding.Default.GetString(tcpClient.IncomingDataBuffer, 0, rxSize);
 
             if (rxSize == 0)
             {
-                CrestronConsole.PrintLine("Size triggers Disconnect");
+                if (bDebug)
+                    CrestronConsole.PrintLine("Size triggers Disconnect");
                 if (OnDisconnect != null)
                     OnDisconnect();
             }
@@ -115,7 +128,8 @@ namespace SimplSharpNetUtils
 
         void myConnectCallback(TCPClient tcpClient)
         {
-            CrestronConsole.PrintLine("Connect Callback " + tcpClient.ClientStatus);
+            if (bDebug)
+                CrestronConsole.PrintLine("Connect Callback " + tcpClient.ClientStatus);
 
             if (tcpClient.ClientStatus == SocketStatus.SOCKET_STATUS_CONNECTED)
             {
@@ -136,10 +150,12 @@ namespace SimplSharpNetUtils
             {
                 byte[] db = System.Text.Encoding.ASCII.GetBytes(data.ToString());
                 SocketErrorCodes err = client.SendData(db, db.Length);
-                CrestronConsole.PrintLine("Send() = " + err);
+                if (bDebug)
+                    CrestronConsole.PrintLine("Send() = " + err);
                 return Convert.ToInt32(err);
             }
-            else
+
+            if (bDebug)
                 CrestronConsole.PrintLine("Called Send() on a Null client!");
             return -1;
         }

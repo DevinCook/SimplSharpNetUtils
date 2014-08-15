@@ -69,10 +69,14 @@
         <Programmer />
         <ArchiveFilename>C:\Users\devinc\Documents\Visual Studio 2008\Projects\SimplSharpNetUtils\SimplSharpNetUtils\bin\SimplSharpNetUtils.clz</ArchiveFilename>
         <MinFirmwareVersion>1.007.0017</MinFirmwareVersion>
-        <CompiledOn>5/8/2014 8:35:04 PM</CompiledOn>
+        <CompiledOn>8/15/2014 3:41:00 PM</CompiledOn>
         <AdditionalInfo />
         <EmbedSourceArchive>False</EmbedSourceArchive>
-        <CopyTo />
+        <CopyTo>
+          <DebugAnyCPU>
+            <Folder>.\SimplPlus</Folder>
+          </DebugAnyCPU>
+        </CopyTo>
         <OriginalReferenceSources />
       </FlavorProperties>
     </VisualStudio>

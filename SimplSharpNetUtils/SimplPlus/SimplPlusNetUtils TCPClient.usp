@@ -17,18 +17,40 @@ Comments:
 #ENABLE_TRACE
 
 INTEGER_PARAMETER Port;
+INTEGER_PARAMETER RX_Buffer_Sz;
 
-STRING_INPUT	Address[64];
 
-DIGITAL_INPUT	Connect;
-DIGITAL_INPUT	FilterVTs;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	DEBUG;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
 
-STRING_INPUT	TX$[1024];
-STRING_OUTPUT	RX$;
+DIGITAL_INPUT	Connect;		DIGITAL_OUTPUT	Connected;
+DIGITAL_INPUT	FilterVTs;		DIGITAL_OUTPUT	_SKIP_;
 
-DIGITAL_OUTPUT	Connected;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+STRING_INPUT	Address[64];	STRING_OUTPUT	_SKIP_;
+STRING_INPUT	_SKIP_;			STRING_OUTPUT	_SKIP_;
+STRING_INPUT	TX$[1024];		STRING_OUTPUT	RX$;
+
                           
 #USER_SIMPLSHARP_LIBRARY "SIMPLSharpNetUtils"
+
+
+#BEGIN_PARAMETER_PROPERTIES Port
+   propValidUnits=unitDecimal;
+   propBounds=1d,65535d;
+   propDefaultValue=23d;
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES RX_BUFFER_SZ
+   propValidUnits=unitDecimal;
+   propBounds=16d,1024d;
+   propDefaultValue=200d;
+#END_PARAMETER_PROPERTIES
+
 
 STRING Address_Cache[64];
 
@@ -42,7 +64,7 @@ Change Address
 
 PUSH Connect
 {
-	Client.Connect(Address_Cache,Port,1024);
+	Client.Connect(Address_Cache,Port,RX_BUFFER_SZ);
 }
 
 Release Connect
@@ -76,6 +98,11 @@ Change TX$
 Change FilterVTs
 {
 	Client.FilterVtCmds = FilterVTs;
+}
+
+Change DEBUG
+{
+//	Client.Debug = DEBUG;
 }
 
 Function Init()
