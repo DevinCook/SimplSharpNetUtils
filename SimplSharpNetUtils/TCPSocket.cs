@@ -24,6 +24,8 @@ namespace SimplSharpNetUtils
         bool bFilterVtCmds = false;
         bool bDebug = false;
 
+        String_Pacer Pacer;
+
         public delegate void ConnectedHandler();
         public ConnectedHandler OnConnect { set; get; }
 
@@ -47,6 +49,8 @@ namespace SimplSharpNetUtils
 
         public TCPSocket()
         {
+            Pacer = new String_Pacer(10, 10);
+            Pacer.OnChunk = MyChunkHandler;
         }
 
         public int Connect(String IPAddress, int port, int buffersz)
@@ -54,7 +58,8 @@ namespace SimplSharpNetUtils
             if (bDebug)
                 CrestronConsole.PrintLine("Connect({0},{1},{2})", IPAddress, port, buffersz);
 
-            client = new TCPClient(IPAddress, port, buffersz);
+            Pacer.Chunk_Size = buffersz;
+            client = new TCPClient(IPAddress, port, 4096);
 
             SocketErrorCodes err = client.ConnectToServerAsync(myConnectCallback);
 
@@ -70,6 +75,12 @@ namespace SimplSharpNetUtils
                 CrestronConsole.PrintLine("Disconnect()");
             if (client != null)
                 client.DisconnectFromServer();
+        }
+
+        internal void MyChunkHandler(string data)
+        {
+            if (OnRx != null)
+                OnRx(new SimplSharpString(data));
         }
 
         String DoFilterVtCmds(String sIn)
@@ -119,8 +130,7 @@ namespace SimplSharpNetUtils
 
                 if (rxBuff.Length > 0)
                 {
-                    if (OnRx != null)
-                        OnRx(new SimplSharpString(rxBuff));
+                    Pacer.Enqueue(rxBuff);
                     client.ReceiveDataAsync(myReceiveCallback);
                 }
             }
@@ -159,7 +169,5 @@ namespace SimplSharpNetUtils
                 CrestronConsole.PrintLine("Called Send() on a Null client!");
             return -1;
         }
-
-
     }
 }

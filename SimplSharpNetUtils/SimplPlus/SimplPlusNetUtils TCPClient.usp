@@ -42,7 +42,7 @@ STRING_INPUT	TX$[1024];		STRING_OUTPUT	RX$;
 #BEGIN_PARAMETER_PROPERTIES Port
    propValidUnits=unitDecimal;
    propBounds=1d,65535d;
-   propDefaultValue=23d;
+   propDefaultValue=24d;
 #END_PARAMETER_PROPERTIES
 
 #BEGIN_PARAMETER_PROPERTIES RX_BUFFER_SZ
@@ -55,7 +55,6 @@ STRING_INPUT	TX$[1024];		STRING_OUTPUT	RX$;
 STRING Address_Cache[64];
 
 TCPSocket Client; 
-
 
 Change Address
 {
@@ -86,7 +85,6 @@ Callback Function MyOnDisconnect()
 
 Callback Function MyOnReceive(String s)
 {
-	TRACE("On Rx$");
 	RX$ = s;
 }
 
